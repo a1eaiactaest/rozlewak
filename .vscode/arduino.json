@@ -1,0 +1,5 @@
+{
+    "port": "/dev/tty.usbmodem101",
+    "board": "arduino:avr:uno",
+    "programmer": "avrispmkii"
+}
