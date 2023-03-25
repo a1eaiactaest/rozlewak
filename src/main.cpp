@@ -8,6 +8,10 @@ ezButton limitSwitch1(7);
 ezButton limitSwitch2(6);
 ezButton limitSwitch3(5);
 
+ezButton volButton1(8);
+ezButton volButton2(9);
+ezButton volButton3(10);
+
 #define LCD_SDA A4
 #define LCD_SCL A5
 
@@ -15,9 +19,16 @@ ezButton limitSwitch3(5);
 
 #define BUTTON_DEBOUNCE_MS 100
 
+/* *** VOLUME BUTTONS *** */
+struct VOLUME_BUTTONS {
+  ezButton button1, button2, button3;
+};
+
+VOLUME_BUTTONS buttons = {volButton1, volButton2, volButton3};
+
 /* *** LIMIT SWITCHES *** */
 struct LIMIT_SWITCHES {
-  ezButton limitSwitch1, limitSwitch2, limitSwitch3;
+  ezButton switch1, switch2, switch3;
 };
 
 LIMIT_SWITCHES switches = {limitSwitch1, limitSwitch2, limitSwitch3};
