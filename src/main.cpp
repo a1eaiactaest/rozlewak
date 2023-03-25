@@ -19,19 +19,15 @@ ezButton volButton3(10);
 
 #define BUTTON_DEBOUNCE_MS 100
 
-/* *** VOLUME BUTTONS *** */
-struct VOLUME_BUTTONS {
+struct BUTTONS {
   ezButton button1, button2, button3;
 };
 
-VOLUME_BUTTONS buttons = {volButton1, volButton2, volButton3};
+/* *** VOLUME BUTTONS *** */
+BUTTONS volume_buttons = {volButton1, volButton2, volButton3};
 
 /* *** LIMIT SWITCHES *** */
-struct LIMIT_SWITCHES {
-  ezButton switch1, switch2, switch3;
-};
-
-LIMIT_SWITCHES switches = {limitSwitch1, limitSwitch2, limitSwitch3};
+BUTTONS switches = {limitSwitch1, limitSwitch2, limitSwitch3};
 
 void setup_limit_switches() {
   limitSwitch1.setDebounceTime(BUTTON_DEBOUNCE_MS);
