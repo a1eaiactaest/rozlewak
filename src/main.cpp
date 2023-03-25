@@ -16,6 +16,11 @@ ezButton limitSwitch3(5);
 #define BUTTON_DEBOUNCE_MS 100
 
 /* *** LIMIT SWITCHES *** */
+struct LIMIT_SWITCHES {
+  ezButton limitSwitch1, limitSwitch2, limitSwitch3;
+};
+
+LIMIT_SWITCHES switches = {limitSwitch1, limitSwitch2, limitSwitch3};
 
 void setup_limit_switches() {
   limitSwitch1.setDebounceTime(BUTTON_DEBOUNCE_MS);
