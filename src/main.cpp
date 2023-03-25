@@ -1,11 +1,24 @@
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
+#include <ezButton.h>
 
 LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+
+ezButton limitSwitch1(7);
 
 #define LCD_SDA A4
 #define LCD_SCL A5
 
+#define LED_PIN 13
+
+/* *** LIMIT SWITCHES *** */
+
+void init_limit_switches_loop() {
+  // apparently this must be called
+  limitSwitch1.loop();
+}
+
+/* *** LCD FUNCTIONS *** */
 void lcd_myprint(String str) {
   lcd.clear();
   lcd.home();
@@ -35,7 +48,20 @@ void setup() {
 
   Serial.begin(9600);
   Serial.println("***SERIAL INIT***");
+
+  limitSwitch1.setDebounceTime(50); // miliseconds
+
+  pinMode(LED_PIN, OUTPUT);
 }
 
 void loop() {
+  init_limit_switches_loop();
+
+  if (limitSwitch1.isPressed()) {
+    digitalWrite(LED_PIN, HIGH);
+  }
+
+  if (limitSwitch1.isReleased()) {
+    digitalWrite(LED_PIN, LOW);
+  }
 }
