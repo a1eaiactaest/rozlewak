@@ -5,17 +5,60 @@
 LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
 
 ezButton limitSwitch1(7);
+ezButton limitSwitch2(6);
+ezButton limitSwitch3(5);
 
 #define LCD_SDA A4
 #define LCD_SCL A5
 
 #define LED_PIN 13
 
+#define BUTTON_DEBOUNCE_MS 100
+
 /* *** LIMIT SWITCHES *** */
+
+void setup_limit_switches() {
+  limitSwitch1.setDebounceTime(BUTTON_DEBOUNCE_MS);
+  limitSwitch2.setDebounceTime(BUTTON_DEBOUNCE_MS);
+  limitSwitch3.setDebounceTime(BUTTON_DEBOUNCE_MS);
+}
 
 void init_limit_switches_loop() {
   // apparently this must be called
   limitSwitch1.loop();
+  limitSwitch2.loop();
+  limitSwitch3.loop();
+}
+
+void handle_limit_switches() {
+  init_limit_switches_loop();
+
+  // switch 1 
+  if (limitSwitch1.isPressed()) {
+    digitalWrite(LED_PIN, HIGH);
+  }
+
+  if (limitSwitch1.isReleased()) {
+    digitalWrite(LED_PIN, LOW);
+  }
+
+  // switch 2 
+  if (limitSwitch2.isPressed()) {
+    digitalWrite(LED_PIN, HIGH);
+  }
+
+  if (limitSwitch2.isReleased()) {
+    digitalWrite(LED_PIN, LOW);
+  }
+
+  // switch 3 
+  if (limitSwitch3.isPressed()) {
+    digitalWrite(LED_PIN, HIGH);
+  }
+
+  if (limitSwitch3.isReleased()) {
+    digitalWrite(LED_PIN, LOW);
+  }
 }
 
 /* *** LCD FUNCTIONS *** */
@@ -49,19 +92,10 @@ void setup() {
   Serial.begin(9600);
   Serial.println("***SERIAL INIT***");
 
-  limitSwitch1.setDebounceTime(50); // miliseconds
-
+  // tmp test LED
   pinMode(LED_PIN, OUTPUT);
 }
 
 void loop() {
-  init_limit_switches_loop();
-
-  if (limitSwitch1.isPressed()) {
-    digitalWrite(LED_PIN, HIGH);
-  }
-
-  if (limitSwitch1.isReleased()) {
-    digitalWrite(LED_PIN, LOW);
-  }
+  handle_limit_switches();
 }
