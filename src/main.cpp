@@ -23,53 +23,49 @@ struct BUTTONS {
   ezButton button1, button2, button3;
 };
 
+ezButton get_struct_buttons(BUTTONS s, int i) {
+  switch(i) {
+    case 0: return s.button1;
+    case 1: return s.button2;
+    case 2: return s.button3;
+    default: return -1;
+  }
+}
+
 /* *** VOLUME BUTTONS *** */
 BUTTONS volume_buttons = {volButton1, volButton2, volButton3};
 
-/* *** LIMIT SWITCHES *** */
-BUTTONS switches = {limitSwitch1, limitSwitch2, limitSwitch3};
+BUTTONS limit_switches = {limitSwitch1, limitSwitch2, limitSwitch3};
 
-void setup_limit_switches() {
-  limitSwitch1.setDebounceTime(BUTTON_DEBOUNCE_MS);
-  limitSwitch2.setDebounceTime(BUTTON_DEBOUNCE_MS);
-  limitSwitch3.setDebounceTime(BUTTON_DEBOUNCE_MS);
+void setup_buttons(BUTTONS buttons) {
+  for (int i=0; i < 3; i++){
+    ezButton cbutton = get_struct_buttons(buttons, i);
+    cbutton.setDebounceTime(BUTTON_DEBOUNCE_MS);
+  }
 }
 
-void init_limit_switches_loop() {
-  // apparently this must be called
-  limitSwitch1.loop();
-  limitSwitch2.loop();
-  limitSwitch3.loop();
+void init_buttons_loop(BUTTONS buttons) {
+  for (int i=0; i < 3; i++){
+    Serial.println("INIT");
+    ezButton cbutton = get_struct_buttons(buttons, i);
+    cbutton.loop();
+  }
+}
+
+void handle_volume_buttons() {
+
 }
 
 void handle_limit_switches() {
-  init_limit_switches_loop();
+  init_buttons_loop(limit_switches);
 
-  // switch 1 
-  if (limitSwitch1.isPressed()) {
-    digitalWrite(LED_PIN, HIGH);
-  }
-
-  if (limitSwitch1.isReleased()) {
-    digitalWrite(LED_PIN, LOW);
-  }
-
-  // switch 2 
-  if (limitSwitch2.isPressed()) {
-    digitalWrite(LED_PIN, HIGH);
-  }
-
-  if (limitSwitch2.isReleased()) {
-    digitalWrite(LED_PIN, LOW);
-  }
-
-  // switch 3 
-  if (limitSwitch3.isPressed()) {
-    digitalWrite(LED_PIN, HIGH);
-  }
-
-  if (limitSwitch3.isReleased()) {
-    digitalWrite(LED_PIN, LOW);
+  for (int i = 0; i < 3; i++){
+    ezButton cbutton = get_struct_buttons(limit_switches, i);
+    if (cbutton.isPressed()){
+      digitalWrite(LED_PIN, HIGH);
+    } else if (cbutton.isReleased()) {
+      digitalWrite(LED_PIN, LOW);
+    }
   }
 }
 
@@ -106,6 +102,8 @@ void setup() {
 
   // tmp test LED
   pinMode(LED_PIN, OUTPUT);
+
+  setup_buttons(limit_switches);
 }
 
 void loop() {
