@@ -23,7 +23,6 @@ ezButton limit_switches[] = {limitSwitch1, limitSwitch2, limitSwitch3};
 ezButton volume_buttons[] = {volButton1, volButton2, volButton3};
 
 int VOLUME = 50; // ml
-int LAST_VOLUME = VOLUME;
 
 void setup_buttons(ezButton buttons[]) {
   for (int i=0; i < 3; i++){
@@ -54,13 +53,13 @@ void handle_volume_buttons() {
     if (volume_buttons[i].isPressed()){
       Serial.println("pressed");
       if (i == 0) { // sub button
-        LAST_VOLUME = VOLUME;
         if (VOLUME > 50){
           VOLUME -= 50;
+          display_volume();
         }
       } else if (i == 2) { // add button
-        LAST_VOLUME = VOLUME;
         VOLUME += 50;
+        display_volume();
       } else if (i == 3) { // start button
         start_pouring_procedure();
       }
@@ -126,7 +125,4 @@ void loop() {
   handle_limit_switches();
   handle_volume_buttons();
 
-  if (VOLUME != LAST_VOLUME){
-    display_volume();
-  }
 }
