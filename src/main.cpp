@@ -19,9 +19,11 @@ ezButton volButton3(10); // add vol
 
 #define BUTTON_DEBOUNCE_MS 5
 
-
 ezButton limit_switches[] = {limitSwitch1, limitSwitch2, limitSwitch3};
 ezButton volume_buttons[] = {volButton1, volButton2, volButton3};
+
+int VOLUME = 50; // ml
+int LAST_VOLUME = VOLUME;
 
 void setup_buttons(ezButton buttons[]) {
   for (int i=0; i < 3; i++){
@@ -43,10 +45,26 @@ void init_volume_buttons_loop(){
   }
 }
 
+void start_pouring_procedure(){
+
+}
+
 void handle_volume_buttons() {
   for (int i=0; i < 3; i++){
-    if (limit_switches[i].isPressed()){
-
+    if (volume_buttons[i].isPressed()){
+      Serial.println("pressed");
+      if (i == 0) { // sub button
+        LAST_VOLUME = VOLUME;
+        if (VOLUME > 50){
+          VOLUME -= 50;
+        }
+      } else if (i == 2) { // add button
+        LAST_VOLUME = VOLUME;
+        VOLUME += 50;
+      } else if (i == 3) { // start button
+        start_pouring_procedure();
+      }
+      Serial.println(VOLUME);
     }
   }
 }
@@ -81,24 +99,34 @@ void lcd_home(){
   lcd_myprint("Witaj przy Rozlewaku!");
 }
 
+void display_volume(){
+  String volume_string = String("Vol: " + String(VOLUME));
+  lcd_myprint(volume_string);
+}
+
 void setup() {
-  // put your setup code here, to run once:
+  Serial.begin(9600);
+  Serial.println("***SERIAL INIT***");
+
+  pinMode(LED_PIN, OUTPUT);
+
+  setup_buttons(limit_switches);
+
   lcd.init();
   lcd.clear();
   lcd.backlight();
   lcd_home();
-
-
-  Serial.begin(9600);
-  Serial.println("***SERIAL INIT***");
-
-  // tmp test LED
-  pinMode(LED_PIN, OUTPUT);
-
-  setup_buttons(limit_switches);
+  delay(3000);
+  display_volume();
 }
 
 void loop() {
   init_limit_switches_loop();
+  init_volume_buttons_loop();
   handle_limit_switches();
+  handle_volume_buttons();
+
+  if (VOLUME != LAST_VOLUME){
+    display_volume();
+  }
 }
