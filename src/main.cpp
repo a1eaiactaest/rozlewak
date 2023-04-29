@@ -2,6 +2,17 @@
 #include <LiquidCrystal_I2C.h>
 #include <ezButton.h>
 
+#define LCD_SDA A4
+#define LCD_SCL A5
+
+#define LED_PIN 13
+
+// L298N
+#define GATE_1 3
+#define GATE_2 4
+
+#define BUTTON_DEBOUNCE_MS 5
+
 LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
 
 ezButton limitSwitch1(7);
