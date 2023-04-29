@@ -40,12 +40,15 @@ void set_lamp_mode(int mode){
   if (mode != LAMP_MODE){
     if (mode == 1){
       digitalWrite(GATE_1, HIGH);
-      digitalWrite(GATE_2, HIGH);
-    } else if (mode == 2){
+      digitalWrite(GATE_2, LOW);
+      LAMP_MODE = 1;
+    } else if (mode == 0){
       digitalWrite(GATE_1, LOW);
       digitalWrite(GATE_2, LOW);
+      LAMP_MODE = 0;
     }
   }
+  Serial.println(LAMP_MODE);
 }
 
 // LCD Functions
@@ -98,7 +101,11 @@ void init_volume_buttons_loop(){
 }
 
 void start_pouring_procedure(){
-  set_lamp_mode(1);
+  if (LAMP_MODE == 0){
+    set_lamp_mode(1);
+  } else {
+    set_lamp_mode(0);
+  }
 }
 
 void handle_volume_buttons() {
