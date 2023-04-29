@@ -52,10 +52,9 @@ void lcd_home(){
 
 void display_volume(){
   String volume_string = String("Vol: " + String(VOLUME));
+  Serial.println(volume_string);
   lcd_myprint(volume_string);
 }
-
-
 
 // Button Functions
 
