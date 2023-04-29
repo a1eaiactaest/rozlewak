@@ -29,7 +29,35 @@ ezButton volume_buttons[] = {volButton1, volButton2, volButton3};
 
 int VOLUME = 50; // ml
 
-void display_volume();
+// LCD Functions
+
+void lcd_myprint(String str) {
+  lcd.clear();
+  lcd.home();
+  if (str.length() < 16){
+    lcd.print(str);
+  } else {
+    lcd.setCursor(0,0);
+    lcd.print(str.substring(0, 15));
+    lcd.setCursor(0,1);
+    lcd.print(str.substring(15));
+  }
+}
+
+void lcd_home(){
+  lcd.clear();
+  lcd.home();
+  lcd_myprint("Witaj przy Rozlewaku!");
+}
+
+void display_volume(){
+  String volume_string = String("Vol: " + String(VOLUME));
+  lcd_myprint(volume_string);
+}
+
+
+
+// Button Functions
 
 void setup_buttons(ezButton buttons[]) {
   for (int i=0; i < 3; i++){
@@ -83,31 +111,6 @@ void handle_limit_switches() {
       digitalWrite(LED_PIN, LOW);
     }
   }
-}
-
-/* *** LCD FUNCTIONS *** */
-void lcd_myprint(String str) {
-  lcd.clear();
-  lcd.home();
-  if (str.length() < 16){
-    lcd.print(str);
-  } else {
-    lcd.setCursor(0,0);
-    lcd.print(str.substring(0, 15));
-    lcd.setCursor(0,1);
-    lcd.print(str.substring(15));
-  }
-}
-
-void lcd_home(){
-  lcd.clear();
-  lcd.home();
-  lcd_myprint("Witaj przy Rozlewaku!");
-}
-
-void display_volume(){
-  String volume_string = String("Vol: " + String(VOLUME));
-  lcd_myprint(volume_string);
 }
 
 void setup() {
