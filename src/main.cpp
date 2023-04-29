@@ -24,6 +24,8 @@ ezButton volume_buttons[] = {volButton1, volButton2, volButton3};
 
 int VOLUME = 50; // ml
 
+void display_volume();
+
 void setup_buttons(ezButton buttons[]) {
   for (int i=0; i < 3; i++){
     String s = "DEBOUNCED BUTTON " + i;
