@@ -23,12 +23,6 @@ ezButton volButton1(8); // sub vol
 ezButton volButton2(9); // start
 ezButton volButton3(10); // add vol
 
-#define LCD_SDA A4
-#define LCD_SCL A5
-
-#define LED_PIN 13
-
-#define BUTTON_DEBOUNCE_MS 5
 
 ezButton limit_switches[] = {limitSwitch1, limitSwitch2, limitSwitch3};
 ezButton volume_buttons[] = {volButton1, volButton2, volButton3};
