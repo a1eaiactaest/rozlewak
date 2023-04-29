@@ -28,6 +28,25 @@ ezButton limit_switches[] = {limitSwitch1, limitSwitch2, limitSwitch3};
 ezButton volume_buttons[] = {volButton1, volButton2, volButton3};
 
 int VOLUME = 50; // ml
+int LAMP_MODE = 0; // default off
+
+// LAMP
+void set_lamp_mode(int mode){
+  /*
+    0 turn off
+    1 turn on
+  */
+
+  if (mode != LAMP_MODE){
+    if (mode == 1){
+      digitalWrite(GATE_1, HIGH);
+      digitalWrite(GATE_2, HIGH);
+    } else if (mode == 2){
+      digitalWrite(GATE_1, LOW);
+      digitalWrite(GATE_2, LOW);
+    }
+  }
+}
 
 // LCD Functions
 
@@ -79,7 +98,7 @@ void init_volume_buttons_loop(){
 }
 
 void start_pouring_procedure(){
-
+  set_lamp_mode(1);
 }
 
 void handle_volume_buttons() {
@@ -94,7 +113,8 @@ void handle_volume_buttons() {
       } else if (i == 2) { // add button
         VOLUME += 50;
         display_volume();
-      } else if (i == 3) { // start button
+      } else if (i == 1) { // start button
+        Serial.println("POURING");
         start_pouring_procedure();
       }
       Serial.println(VOLUME);
@@ -112,11 +132,18 @@ void handle_limit_switches() {
   }
 }
 
+
 void setup() {
   Serial.begin(9600);
   Serial.println("***SERIAL INIT***");
 
   pinMode(LED_PIN, OUTPUT);
+
+  pinMode(GATE_1, OUTPUT);
+  pinMode(GATE_2, OUTPUT);
+  digitalWrite(GATE_1, LOW);
+  digitalWrite(GATE_2, LOW);
+
 
   setup_buttons(limit_switches);
 
