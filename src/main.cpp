@@ -5,7 +5,7 @@
 #define LCD_SDA A4
 #define LCD_SCL A5
 
-#define LED_PIN 13
+#define LED_PIN 2
 
 // L298N
 #define GATE_1 3
