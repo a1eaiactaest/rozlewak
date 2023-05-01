@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
 #include <ezButton.h>
+#include <MFRC522.h>
 
 #define LCD_SDA A4
 #define LCD_SCL A5
