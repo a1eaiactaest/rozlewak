@@ -9,20 +9,24 @@
 #define LED_PIN 2
 
 // L298N
-#define GATE_1 3
-#define GATE_2 4
+#define GATE_1 2
+#define GATE_2 3
+
+// MFRC522
+#define RST_PIN 11
+#define SS_PIN 12
 
 #define BUTTON_DEBOUNCE_MS 5
 
 LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
 
-ezButton limitSwitch1(7);
-ezButton limitSwitch2(6);
-ezButton limitSwitch3(5);
+ezButton limitSwitch1(6);
+ezButton limitSwitch2(5);
+ezButton limitSwitch3(4);
 
-ezButton volButton1(8); // sub vol
-ezButton volButton2(9); // start
-ezButton volButton3(10); // add vol
+ezButton volButton1(7); // sub vol
+ezButton volButton2(8); // start
+ezButton volButton3(9); // add vol
 
 
 ezButton limit_switches[] = {limitSwitch1, limitSwitch2, limitSwitch3};
