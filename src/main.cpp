@@ -18,6 +18,7 @@
 
 #define BUTTON_DEBOUNCE_MS 5
 
+// check back of L2C chip for address
 LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
 
 ezButton limitSwitch1(6);
@@ -26,7 +27,7 @@ ezButton limitSwitch3(4);
 
 ezButton volButton1(7); // sub vol
 ezButton volButton2(8); // start
-ezButton volButton3(9); // add vol
+ezButton volButton3(10); // add vol, 9 digital pin is broken on Mega
 
 
 ezButton limit_switches[] = {limitSwitch1, limitSwitch2, limitSwitch3};
