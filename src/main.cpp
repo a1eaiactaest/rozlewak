@@ -9,25 +9,23 @@
 #define LED_PIN 2
 
 // L298N
-#define GATE_1 2
-#define GATE_2 3
+#define L289N_IN1 2
+#define L289N_IN2 3
 
-// MFRC522
-#define RST_PIN 11
-#define SS_PIN 12
+#define L289N_IN4 5 // use
 
 #define BUTTON_DEBOUNCE_MS 5
 
 // check back of L2C chip for address
 LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
 
-ezButton limitSwitch1(6);
-ezButton limitSwitch2(5);
-ezButton limitSwitch3(4);
+ezButton limitSwitch1(A7);
+ezButton limitSwitch2(A6);
+ezButton limitSwitch3(A5);
 
-ezButton volButton1(7); // sub vol
-ezButton volButton2(8); // start
-ezButton volButton3(10); // add vol, 9 digital pin is broken on Mega
+ezButton volButton1(A4); // sub vol
+ezButton volButton2(A3); // start
+ezButton volButton3(A2); // add vol
 
 
 ezButton limit_switches[] = {limitSwitch1, limitSwitch2, limitSwitch3};
@@ -35,6 +33,19 @@ ezButton volume_buttons[] = {volButton1, volButton2, volButton3};
 
 int VOLUME = 50; // ml
 int LAMP_MODE = 0; // default off
+int PUMP_MODE = 0; // default off
+
+void set_pump_mode(int mode){
+  if (mode != PUMP_MODE){
+    if (mode == 1){
+      digitalWrite(L289N_IN4, HIGH);
+      PUMP_MODE = 1;
+    } else if (mode == 0){
+      digitalWrite(L289N_IN4, LOW);
+      PUMP_MODE = 0;
+    }
+  }
+}
 
 // LAMP
 void set_lamp_mode(int mode){
@@ -45,16 +56,15 @@ void set_lamp_mode(int mode){
 
   if (mode != LAMP_MODE){
     if (mode == 1){
-      digitalWrite(GATE_1, HIGH);
-      digitalWrite(GATE_2, LOW);
+      digitalWrite(L289N_IN1, HIGH);
+      digitalWrite(L289N_IN2, LOW);
       LAMP_MODE = 1;
     } else if (mode == 0){
-      digitalWrite(GATE_1, LOW);
-      digitalWrite(GATE_2, LOW);
+      digitalWrite(L289N_IN1, LOW);
+      digitalWrite(L289N_IN2, LOW);
       LAMP_MODE = 0;
     }
   }
-  Serial.println(LAMP_MODE);
 }
 
 // LCD Functions
@@ -109,8 +119,10 @@ void init_volume_buttons_loop(){
 void start_pouring_procedure(){
   if (LAMP_MODE == 0){
     set_lamp_mode(1);
+    set_pump_mode(1);
   } else {
     set_lamp_mode(0);
+    set_pump_mode(0);
   }
 }
 
@@ -152,10 +164,12 @@ void setup() {
 
   pinMode(LED_PIN, OUTPUT);
 
-  pinMode(GATE_1, OUTPUT);
-  pinMode(GATE_2, OUTPUT);
-  digitalWrite(GATE_1, LOW);
-  digitalWrite(GATE_2, LOW);
+  pinMode(L289N_IN1, OUTPUT);
+  pinMode(L289N_IN2, OUTPUT);
+  pinMode(L289N_IN4, OUTPUT);
+  digitalWrite(L289N_IN1, LOW);
+  digitalWrite(L289N_IN2, LOW);
+  digitalWrite(L289N_IN4, LOW);
 
 
   setup_buttons(limit_switches);
