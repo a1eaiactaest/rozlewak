@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
 #include <ezButton.h>
-#include <MFRC522.h>
+#include <Servo.h>
 
 #define LCD_SDA A4
 #define LCD_SCL A5
@@ -13,6 +13,8 @@
 #define L289N_IN2 3
 
 #define L289N_IN4 5 // use
+
+#define SERVO_PIN 8
 
 #define BUTTON_DEBOUNCE_MS 5
 
