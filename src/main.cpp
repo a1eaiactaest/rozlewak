@@ -23,6 +23,8 @@ ezButton limitSwitch1(A7);
 ezButton limitSwitch2(A6);
 ezButton limitSwitch3(A5);
 
+int limitSwitchesState[] = {0,0,0};
+
 ezButton volButton1(A4); // sub vol
 ezButton volButton2(A3); // start
 ezButton volButton3(A2); // add vol
@@ -150,11 +152,17 @@ void handle_volume_buttons() {
 void handle_limit_switches() {
   for (int i=0; i < 3; i++){
     if (limit_switches[i].isPressed()){
+      limitSwitchesState[i] = 1;
       digitalWrite(LED_PIN, HIGH);
     } else if (limit_switches[i].isReleased()){
       digitalWrite(LED_PIN, LOW);
+      limitSwitchesState[i] = 0;
     }
   }
+  for (int i=0; i < 3; i++){
+    Serial.print(limitSwitchesState[i]);
+  }
+  Serial.println();
 }
 
 
