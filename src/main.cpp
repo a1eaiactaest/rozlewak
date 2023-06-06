@@ -19,6 +19,12 @@
 
 #define BUTTON_DEBOUNCE_MS 5
 
+int angles[] = {60, 90, 120};
+
+Servo myservo;
+
+int servo_pos = 0;
+
 // check back of L2C chip for address
 LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
 
@@ -131,6 +137,49 @@ void init_volume_buttons_loop(){
   }
 }
 
+int* map_positions(int state[]){
+
+  int acc = 0;
+  for (int i = 0; i < 3; i++){
+    if (state[i] == 1){
+      acc += 1;
+    }
+  }
+
+  int positions[acc];
+  for (int i = 0; i < 3; i++){
+    if (state[i] != 0){
+      positions[i] = angles[i];
+    }
+  }
+  return positions;
+
+}
+
+void reset_servo(){
+  myservo.write(0);
+}
+
+void setup_servo(){
+  myservo.attach(SERVO_PIN);
+  reset_servo();
+}
+
+void set_servo_positions(){
+  int *positions = map_positions(limitSwitchesState);
+  int n = sizeof(positions) / sizeof(positions[0]);
+
+  Serial.println(n);
+  for (int i = 0; i < n; i++){
+    if (positions[i] != 0){
+      Serial.print(positions[i]);
+      myservo.write(positions[i]);
+    }
+    // ****** POUR HERE ******
+  }
+  Serial.println();
+}
+
 void start_pouring_procedure(){
   if (LAMP_MODE == 0){
     set_lamp_mode(1);
@@ -139,6 +188,7 @@ void start_pouring_procedure(){
     set_lamp_mode(0);
     set_pump_mode(0);
   }
+  set_servo_positions();
 }
 
 void handle_volume_buttons() {
@@ -179,6 +229,7 @@ void handle_limit_switches() {
 }
 
 
+
 void setup() {
   Serial.begin(9600);
   Serial.println("***SERIAL INIT***");
@@ -194,6 +245,7 @@ void setup() {
 
 
   setup_buttons(limit_switches);
+  setup_servo();
 
   lcd.init();
   lcd.clear();
