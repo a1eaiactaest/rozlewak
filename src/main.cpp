@@ -2,6 +2,7 @@
 #include <LiquidCrystal_I2C.h>
 #include <ezButton.h>
 #include <Servo.h>
+#include <MFRC522.h>
 
 #define LCD_SDA A4
 #define LCD_SCL A5
@@ -38,6 +39,16 @@ ezButton volume_buttons[] = {volButton1, volButton2, volButton3};
 int VOLUME = 50; // ml
 int LAMP_MODE = 0; // default off
 int PUMP_MODE = 0; // default off
+
+int **zip(int *arr1, int *arr2, int length){
+  int **ret = new int*[length];
+  for (int i = 0; i < length; i++){
+    ret[i] = new int[2];
+    ret[i][0] = arr1[i];
+    ret[i][1] = arr2[i];
+  }
+  return ret;
+}
 
 void set_pump_mode(int mode){
   if (mode != PUMP_MODE){
