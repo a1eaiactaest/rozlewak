@@ -137,24 +137,6 @@ void init_volume_buttons_loop(){
   }
 }
 
-int* map_positions(int state[]){
-
-  int acc = 0;
-  for (int i = 0; i < 3; i++){
-    if (state[i] == 1){
-      acc += 1;
-    }
-  }
-
-  int positions[acc];
-  for (int i = 0; i < 3; i++){
-    if (state[i] != 0){
-      positions[i] = angles[i];
-    }
-  }
-  return positions;
-
-}
 
 void reset_servo(){
   myservo.write(0);
@@ -165,12 +147,28 @@ void setup_servo(){
   reset_servo();
 }
 
-void set_servo_positions(){
-  int *positions = map_positions(limitSwitchesState);
-  int n = sizeof(positions) / sizeof(positions[0]);
+void map_positions(int *modify){
+  for (int i = 0; i < 3; i++){
+    if (limitSwitchesState[i] != 0){
+      modify[i] = angles[i];
+    }
+  }
+}
 
-  Serial.println(n);
-  for (int i = 0; i < n; i++){
+void set_servo_positions(){
+  int acc = 0;
+  for (int i = 0; i < 3; i++){
+    if (limitSwitchesState[i] == 1){
+      acc += 1;
+    }
+  }
+
+  int positions[acc];
+
+  map_positions(positions);
+
+  Serial.println("PRINTING POSITIONS");
+  for (int i = 0; i < acc; i++){
     if (positions[i] != 0){
       Serial.print(positions[i]);
       myservo.write(positions[i]);
@@ -222,10 +220,12 @@ void handle_limit_switches() {
       limitSwitchesState[i] = 0;
     }
   }
+  /*
   for (int i=0; i < 3; i++){
     Serial.print(limitSwitchesState[i]);
   }
   Serial.println();
+  */
 }
 
 
