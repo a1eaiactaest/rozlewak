@@ -144,6 +144,7 @@ void reset_servo(){
 
 void setup_servo(){
   myservo.attach(SERVO_PIN);
+  myservo.writeMicroseconds(1500);
   reset_servo();
 }
 
@@ -153,6 +154,12 @@ void map_positions(int *modify){
       modify[i] = angles[i];
     }
   }
+}
+
+void pour_for(int milis){
+  set_pump_mode(1);
+  delay(milis);
+  set_pump_mode(0);
 }
 
 void set_servo_positions(){
@@ -167,24 +174,23 @@ void set_servo_positions(){
 
   map_positions(positions);
 
-  Serial.println("PRINTING POSITIONS");
+  Serial.println("START OF POSITIONS");
   for (int i = 0; i < acc; i++){
-    if (positions[i] != 0){
-      Serial.print(positions[i]);
-      myservo.write(positions[i]);
-    }
+    Serial.println(positions[i]);
+    myservo.write(positions[i]);
+    delay(1000);
     // ****** POUR HERE ******
+    pour_for(500);
   }
-  Serial.println();
+  Serial.println("END OF POSITIONS");
+  set_lamp_mode(0);
 }
 
 void start_pouring_procedure(){
   if (LAMP_MODE == 0){
     set_lamp_mode(1);
-    set_pump_mode(1);
   } else {
     set_lamp_mode(0);
-    set_pump_mode(0);
   }
   set_servo_positions();
 }
@@ -205,7 +211,6 @@ void handle_volume_buttons() {
         Serial.println("POURING");
         start_pouring_procedure();
       }
-      Serial.println(VOLUME);
     }
   }
 }
