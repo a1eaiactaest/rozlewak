@@ -150,16 +150,24 @@ void setup_servo(){
 
 void map_positions(int *modify){
   for (int i = 0; i < 3; i++){
+    Serial.print(limitSwitchesState[i]);
     if (limitSwitchesState[i] != 0){
       modify[i] = angles[i];
     }
   }
+  Serial.println();
 }
 
 void pour_for(int milis){
   set_pump_mode(1);
   delay(milis);
   set_pump_mode(0);
+}
+
+void pour_volume(int volume){
+  // 50ml * 10s 
+  int time = volume * 10;
+  pour_for(time);
 }
 
 void set_servo_positions(){
@@ -180,7 +188,7 @@ void set_servo_positions(){
     myservo.write(positions[i]);
     delay(1000);
     // ****** POUR HERE ******
-    pour_for(500);
+    pour_volume(VOLUME);
   }
   Serial.println("END OF POSITIONS");
   set_lamp_mode(0);
