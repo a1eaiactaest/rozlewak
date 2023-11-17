@@ -183,23 +183,30 @@ void set_servo_positions(){
   map_positions(positions);
 
   Serial.println("START OF POSITIONS");
-  for (int i = 0; i < acc; i++){
-    Serial.println(positions[i]);
-    myservo.write(positions[i]);
-    delay(1000);
-    // ****** POUR HERE ******
-    pour_volume(VOLUME);
+  if (acc > 0) {
+    for (int i = 0; i < acc; i++){
+      Serial.println(positions[i]);
+      for (int pos = servo_pos; pos <= positions[i]; pos += 1){
+        myservo.write(pos);
+        delay(15);
+      }
+      delay(1000);
+      // ****** POUR HERE ******
+      pour_volume(VOLUME);
+    }
   }
   Serial.println("END OF POSITIONS");
-  set_lamp_mode(0);
 }
 
 void start_pouring_procedure(){
+  /*
   if (LAMP_MODE == 0){
     set_lamp_mode(1);
   } else {
     set_lamp_mode(0);
   }
+  */
+  set_lamp_mode(1);
   set_servo_positions();
 }
 
@@ -271,7 +278,7 @@ void setup() {
 void loop() {
   init_limit_switches_loop();
   init_volume_buttons_loop();
-  handle_limit_switches();
   handle_volume_buttons();
+  handle_limit_switches();
 
 }
